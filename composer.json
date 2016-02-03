@@ -1,0 +1,5 @@
+{
+    "require": {
+        "container-interop/container-interop": "^1.1"
+    }
+}
