@@ -1,5 +1,7 @@
 # Container-agnostic service providers
 
+**Draft for submission in container-interop, work in progress!**
+
 ## Usage
 
 To declare a service provider, simply implement the `ServiceProvider` interface.
