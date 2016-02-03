@@ -7,5 +7,5 @@ interface ServiceProvider
     /**
      * @return array
      */
-    public function getServices();
+    public static function getServices();
 }
