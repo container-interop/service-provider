@@ -18,7 +18,7 @@ class MyServiceProvider implements ServiceProvider
         ];
     }
     
-    public static function createMyService(ContainerInterface $container)
+    public static function createMyService(ContainerInterface $container, $previous = null)
     {
         $dependency = $container->get('my_other_service');
     
@@ -32,7 +32,14 @@ The `getServices()` static method must return a list of all container entries th
 - the key is the entry name
 - the value is the name of the static method that will return the entry, aka the **factory method**
 
-Factory methods must be public and static in the service provider class.
+Factory methods must be public and static in the service provider class. They accept the following parameters:
+
+- the container (instance of `Interop\Container\ContainerInterface`)
+- the previous entry if overriding a previous entry, or `null` if not
+
+There is no difference between defining an entry from scratch or overriding/extending an entry. Factory methods always get the `$previous` value for the entry, it is up to you to *use it or ignore it* if it's not `null`.
+
+If know you will be ignoring the `$previous` value, you can omit it from the parameters.
 
 ### Values (aka parameters)
 
@@ -61,3 +68,95 @@ class MyServiceProvider implements ServiceProvider
     }
 }
 ```
+
+### Entry overriding
+
+Overriding an entry defined in another service provider is as easy as defining it again.
+
+Module A:
+
+```php
+class A implements ServiceProvider
+{
+    public static function getServices()
+    {
+        return [
+            'foo' => 'getFoo',
+        ];
+    }
+    
+    public static function getFoo()
+    {
+        return 'abc';
+    }
+}
+```
+
+Module B:
+
+```php
+class B implements ServiceProvider
+{
+    public static function getServices()
+    {
+        return [
+            'foo' => 'getFoo',
+        ];
+    }
+    
+    public static function getFoo()
+    {
+        return 'def';
+    }
+}
+```
+
+If you register the service providers in the correct order in your container (A first, then B), then the entry `foo` will be `'def'` because B's definition will override A's.
+
+### Entry extension
+
+Extending an entry before it is returned by the container is very similar to overriding it.
+
+Module A:
+
+```php
+class A implements ServiceProvider
+{
+    public static function getServices()
+    {
+        return [
+            'logger' => 'getLogger',
+        ];
+    }
+    
+    public static function getLogger()
+    {
+        return new Logger;
+    }
+}
+```
+
+Module B:
+
+```php
+class B implements ServiceProvider
+{
+    public static function getServices()
+    {
+        return [
+            'logger' => 'getLogger',
+        ];
+    }
+    
+    public static function getLogger(ContainerInterface $container, $previous = null)
+    {
+        // Register a new log handler
+        $previous->addHandler(new SyslogHandler());
+    
+        // Return the object that we modified
+        return $previous;
+    }
+}
+```
+
+If you register the service providers in the correct order in your container (A first, then B), the logger will be first created by `A` then a new handler will be registered on it by `B`.
