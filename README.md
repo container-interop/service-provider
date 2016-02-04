@@ -1,6 +1,6 @@
 # Container-agnostic service providers
 
-**Draft for submission in container-interop, work in progress!**
+**Work in progress!**
 
 ## Usage
 
