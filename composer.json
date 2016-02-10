@@ -6,7 +6,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Interop\\Container\\ServiceProvider\\": "src/"
+            "Interop\\Container\\ServiceProvider": "src/"
         }
     },
     "require": {
