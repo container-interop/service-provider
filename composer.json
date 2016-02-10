@@ -1,4 +1,14 @@
 {
+    "name": "container-interop/service-provider",
+    "type": "library",
+    "description": "Promoting container interoperability through standard service providers",
+    "homepage": "https://github.com/container-interop/service-provider",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Interop\\Container\\ServiceProvider\\": "src/"
+        }
+    },
     "require": {
         "container-interop/container-interop": "^1.1"
     }
