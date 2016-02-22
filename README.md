@@ -1,6 +1,32 @@
 # Container-agnostic service providers
 
-**Work in progress!**
+**Work in progress.**
+
+This project is part of the [container-interop](https://github.com/container-interop/container-interop) group. It tries to find a solution for cross-framework modules (aka bundles) by the means of container-agnostic configuration.
+
+## Background
+
+Three main alternatives were identified to solve this problem:
+
+- standard PHP objects/interfaces representing container definitions
+- standard container configuration format (e.g. XML, …)
+- standard service providers
+
+The first solution that container-interop members tried to implement was [a set of standard PHP interfaces for container definitions](https://github.com/container-interop/definition-interop). While this solution is working, it has a few limitations and it is complicated to explain, understand and use.
+
+There were then discussions about a standard configuration format (for example in XML), which has the advantage of being slightly easier to understand and use for module developers. This work has not be formalized yet because of the amount of work needed. This approach would also suffers from a few of the limitations identified in the first approach. It would also requires the inclusion in the standard of many specific features: the standard must define many different ways for how objects can be created and dependencies injected. That makes the standard complex to define, and would force all containers (even simple ones) to support all the features.
+
+This repository contains a proposition for **standard service providers** (service providers are PHP components that provide container entries). This approach has turned out to be simpler on many level:
+
+- the standard is much simpler, which means it is easier to explain and understand
+- it is easier to use as it relies on plain old PHP code
+- it is easier to implement support in containers
+
+## Goal of this project
+
+This project is currently at its experimental phase: the goal is to try this standard in frameworks, containers and modules and iterate until it can be considered as a viable solution for **container-agnostic configuration**.
+
+Until a 1.0.0 release the code in this repository is not stable. Expect changes breaking backward compatibility between minor versions (0.1.x -> 0.2.x).
 
 ## Usage
 
