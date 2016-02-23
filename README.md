@@ -33,7 +33,7 @@ Until a 1.0.0 release the code in this repository is not stable. Expect changes 
 To declare a service provider, simply implement the `ServiceProvider` interface.
 
 ```php
-use Interop\Container\ServiceProvider\ServiceProvider;
+use Interop\Container\ServiceProvider;
 
 class MyServiceProvider implements ServiceProvider
 {
