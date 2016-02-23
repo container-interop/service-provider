@@ -193,3 +193,27 @@ If you register the service providers in the correct order in your container (A 
 - [Simplex](https://github.com/mnapoli/simplex): A [Pimple 3](https://github.com/silexphp/Pimple) fork with full [container-interop](https://github.com/container-interop/container-interop) compliance and cross-framework service-provider support.
 - [Service provider bridge bundle](https://github.com/thecodingmachine/service-provider-bridge-bundle): Use container-interop's service-providers into a Symfony container.
 
+##FAQ
+
+####Why static methods?
+
+It comes from the assumption that container configuration is stateless, i.e. it doesn't depend on anything.
+
+If container configuration is not stateless, it introduces problems for compiled containers (e.g. Symfony) or containers that perform caching (e.g. PHP-DI). Using static methods somewhat guarantees everything to be stateless, which cannot be guaranteed otherwise.
+
+Also static methods are easy to call, no need to instantiate any object which, when building a container in every request, is a bit of a performance advantage compared to having to create new objects for no reason.
+
+####Why does the `getServices()` method returns an array of function names instead of an array of callables?
+
+An array of callables means anonymous functions could be returned, which is hard to adapt to compiled or cached containers.
+
+Even if we explicitly forbid closures (which would be weird in the first place), invokable objects or object methods would also hard to adapt with compiled/cached containers.
+
+So the only callables that would really be allowed would be:
+
+- function name
+- static method (['Class', 'method'])
+
+It seems a bit weird to use function for this use case (especially since they are not autoloadable). So we end up with static methods.
+
+Of course, we could allow the static methods to be in another class than the service provider, but it seems generally a good idea to have the services created in the service provider.
