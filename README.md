@@ -187,15 +187,15 @@ class B implements ServiceProvider
 
 If you register the service providers in the correct order in your container (A first, then B), the logger will be first created by `A` then a new handler will be registered on it by `B`.
 
-##Compatible projects
-###Projects consuming service locators
+## Compatible projects
+### Projects consuming service locators
 
 - [Simplex](https://github.com/mnapoli/simplex): A [Pimple 3](https://github.com/silexphp/Pimple) fork with full [container-interop](https://github.com/container-interop/container-interop) compliance and cross-framework service-provider support.
 - [Service provider bridge bundle](https://github.com/thecodingmachine/service-provider-bridge-bundle): Use container-interop's service-providers into a Symfony container.
 
-##FAQ
+## FAQ
 
-####Why static methods?
+#### Why static methods?
 
 It comes from the assumption that container configuration is stateless, i.e. it doesn't depend on anything.
 
@@ -203,7 +203,7 @@ If container configuration is not stateless, it introduces problems for compiled
 
 Also static methods are easy to call, no need to instantiate any object which, when building a container in every request, is a bit of a performance advantage compared to having to create new objects for no reason.
 
-####Why does the `getServices()` method returns an array of function names instead of an array of callables?
+#### Why does the `getServices()` method returns an array of function names instead of an array of callables?
 
 An array of callables means anonymous functions could be returned, which is hard to adapt to compiled or cached containers.
 
@@ -217,3 +217,17 @@ So the only callables that would really be allowed would be:
 It seems a bit weird to use function for this use case (especially since they are not autoloadable). So we end up with static methods.
 
 Of course, we could allow the static methods to be in another class than the service provider, but it seems generally a good idea to have the services created in the service provider.
+
+## Puli integration
+
+The Puli integration is completely optional and not required to use this standard. It is only here to facilitate usage with Puli.
+
+This package provides a [Puli *binding type*](http://docs.puli.io/en/latest/discovery/getting-started.html): `container-interop/service-provider`. Modules using Puli and implementing this standard can register service providers (fully qualified class names) through this binding type.
+
+This way, frameworks or applications based on Puli can discover service providers automatically.
+
+To register your service provider, simply use Puli's `bind` command:
+
+```sh
+puli bind --class Acme\\Foo\\MyServiceProvider container-interop/service-provider
+```
