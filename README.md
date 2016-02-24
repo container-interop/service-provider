@@ -220,9 +220,11 @@ Of course, we could allow the static methods to be in another class than the ser
 
 ## Puli integration
 
-This package provides a [Puli *binding type*](http://docs.puli.io/en/latest/discovery/getting-started.html): `container-interop/service-provider`. This binding type should contain the fully qualified class names of service providers.
+The Puli integration is completely optional and not required to use this standard. It is only here to facilitate usage with Puli.
 
-Packages implementing the `ServiceProviderInterface` can (optionally) bind the class name of the service provider to this binding type. This way, users consuming the service provider and using Puli can discover the service providers automatically.
+This package provides a [Puli *binding type*](http://docs.puli.io/en/latest/discovery/getting-started.html): `container-interop/service-provider`. Modules using Puli and implementing this standard can register service providers (fully qualified class names) through this binding type.
+
+This way, frameworks or applications based on Puli can discover service providers automatically.
 
 To register your service provider, simply use Puli's `bind` command:
 
