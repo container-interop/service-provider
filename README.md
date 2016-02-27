@@ -65,7 +65,7 @@ Factory methods must be public and static in the service provider class. They ac
 
 The only difference between defining an entry from scratch or overriding/extending a previous entry is that the `$getPrevious` parameter will be either a `callable` or `null`. Factories are free to *use it or ignore it* if it's not `null`.
 
-If know you will not be using the `$container` parameter or the `$getPrevious` parameter, you can omit them:
+If you know you will not be using the `$container` parameter or the `$getPrevious` parameter, you can omit them:
 
 ```php
     public static function getMyService()
