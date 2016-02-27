@@ -40,11 +40,11 @@ class MyServiceProvider implements ServiceProvider
     public static function getServices()
     {
         return [
-            'my_service' => 'createMyService',
+            'my_service' => 'getMyService',
         ];
     }
     
-    public static function createMyService(ContainerInterface $container, $previous = null)
+    public static function getMyService(ContainerInterface $container, callable $getPrevious = null)
     {
         $dependency = $container->get('my_other_service');
     
@@ -61,11 +61,18 @@ The `getServices()` static method must return a list of all container entries th
 Factory methods must be public and static in the service provider class. They accept the following parameters:
 
 - the container (instance of `Interop\Container\ContainerInterface`)
-- the previous entry if overriding a previous entry, or `null` if not
+- a callable that returns the previous entry if overriding a previous entry, or `null` if not
 
-There is no difference between defining an entry from scratch or overriding/extending an entry. Factory methods always get the `$previous` value for the entry, it is up to you to *use it or ignore it* if it's not `null`.
+The only difference between defining an entry from scratch or overriding/extending a previous entry is that the `$getPrevious` parameter will be either a `callable` or `null`. Factories are free to *use it or ignore it* if it's not `null`.
 
-If know you will be ignoring the `$previous` value, you can omit it from the parameters.
+If you know you will not be using the `$container` parameter or the `$getPrevious` parameter, you can omit them:
+
+```php
+    public static function getMyService()
+    {
+        return new MyService();
+    }
+```
 
 ### Values (aka parameters)
 
@@ -174,8 +181,11 @@ class B implements ServiceProvider
         ];
     }
     
-    public static function getLogger(ContainerInterface $container, $previous = null)
+    public static function getLogger(ContainerInterface $container, callable $getPrevious = null)
     {
+        // Get the previous entry
+        $previous = $getPrevious();
+
         // Register a new log handler
         $previous->addHandler(new SyslogHandler());
     
@@ -217,6 +227,26 @@ So the only callables that would really be allowed would be:
 It seems a bit weird to use function for this use case (especially since they are not autoloadable). So we end up with static methods.
 
 Of course, we could allow the static methods to be in another class than the service provider, but it seems generally a good idea to have the services created in the service provider.
+
+#### Why inject a callable instead of the previous entry directly in factories?
+
+In a first version, service provider factories received the previous entry directly as a second parameter:
+
+```php
+    public static function getMyService(ContainerInterface $container, $previous = null)
+    {
+        // ...
+    }
+```
+
+That caused 2 problems:
+
+- it was inefficient since it caused the container to resolve all the previous entries that might exist, even when they were overridden by another service provider
+- when the entry name was a class name, autowiring containers would try to resolve the previous entry using autowiring: when some parameters could not be resolved by the container, there would be exceptions
+
+By injecting a callable that returns the previous entry, that makes it *lazily loaded*. That is both more efficient and avoids most problems with autowiring containers.
+
+For a more detailed explanation you can read the full discussion in the [issue #9](https://github.com/container-interop/service-provider/issues/9).
 
 ## Puli integration
 
