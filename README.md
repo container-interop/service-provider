@@ -198,10 +198,14 @@ class B implements ServiceProvider
 If you register the service providers in the correct order in your container (A first, then B), the logger will be first created by `A` then a new handler will be registered on it by `B`.
 
 ## Compatible projects
-### Projects consuming service locators
+### Projects consuming *service providers*
 
 - [Simplex](https://github.com/mnapoli/simplex): A [Pimple 3](https://github.com/silexphp/Pimple) fork with full [container-interop](https://github.com/container-interop/container-interop) compliance and cross-framework service-provider support.
 - [Service provider bridge bundle](https://github.com/thecodingmachine/service-provider-bridge-bundle): Use container-interop's service-providers into a Symfony container.
+
+### Packages providing *service providers*
+
+- [Glide Module](https://github.com/mnapoli/glide-module): A module integrating Glide in an application using a service provider.
 
 ## FAQ
 
