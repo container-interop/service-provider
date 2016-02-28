@@ -202,6 +202,7 @@ If you register the service providers in the correct order in your container (A 
 
 - [Simplex](https://github.com/mnapoli/simplex): A [Pimple 3](https://github.com/silexphp/Pimple) fork with full [container-interop](https://github.com/container-interop/container-interop) compliance and cross-framework service-provider support.
 - [Service provider bridge bundle](https://github.com/thecodingmachine/service-provider-bridge-bundle): Use container-interop's service-providers into a Symfony container.
+- [Glide Module](https://github.com/mnapoli/glide-module): A module integrating Glide in an application using a service provider.
 
 ## FAQ
 
