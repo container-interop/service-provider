@@ -257,6 +257,12 @@ By injecting a callable that returns the previous entry, that makes it *lazily l
 
 For a more detailed explanation you can read the full discussion in the [issue #9](https://github.com/container-interop/service-provider/issues/9).
 
+### Why does the service provider not configure the container instead of returning entries?
+
+Service providers usually take a container and configure it (e.g. in Pimple). The problem is that it requires the container to expose methods for configuration. That's an impossible requirement in a standard because all containers have a different API for configuration and they could never be made to implement the same.
+
+These service providers provide factories for each container entry it provides. They do not require configuration methods on containers, so they can be made compatible with all/most of them. Each container entry is, in the end, just a callable to invoke, which most containers can do.
+
 ## Puli integration
 
 The Puli integration is completely optional and not required to use this standard. It is only here to facilitate usage with Puli.
