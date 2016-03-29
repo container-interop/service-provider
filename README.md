@@ -74,6 +74,10 @@ If you know you will not be using the `$container` parameter or the `$getPreviou
     }
 ```
 
+Each factory method is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
+
+A factory method should be **stateless**. The service created by the factory should only depend on the input parameters of the factory (`$container` and `$getPrevious`). If the factory needs to fetch parameters, those should be fetched from the container directly (see below).
+
 ### Values (aka parameters)
 
 A service provider can provide PHP objects (services) as well as any value. Simply return the value you wish from factory methods.
@@ -218,7 +222,9 @@ If you register the service providers in the correct order in your container (A 
 
 It comes from the assumption that container configuration is stateless, i.e. it doesn't depend on anything.
 
-If container configuration is not stateless, it introduces problems for compiled containers (e.g. Symfony) or containers that perform caching (e.g. PHP-DI). Using static methods somewhat guarantees everything to be stateless, which cannot be guaranteed otherwise.
+If container configuration is not stateless, it introduces problems for compiled containers (e.g. Symfony) or containers that perform caching (e.g. PHP-DI). Indeed, compiled containers and cached containers will call the `getServices` method in a process and the factories in another process. Relying on some state of the service provider class might therefore be a bad idea.
+
+Using static methods *conveys* the idea that everything should be stateless. Furthermore, since factories are supposed to be stateless, there is no need for a factory to rely on the service provider state (using `$this`), hence the idea to make factories static.
 
 Also static methods are easy to call, no need to instantiate any object which, when building a container in every request, is a bit of a performance advantage compared to having to create new objects for no reason.
 
