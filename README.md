@@ -4,6 +4,8 @@
 
 This project is part of the [container-interop](https://github.com/container-interop/container-interop) group. It tries to find a solution for cross-framework modules (aka bundles) by the means of container-agnostic configuration.
 
+[![Gitter chat](https://badges.gitter.im/container-interop/definition-interop.png)](https://gitter.im/container-interop/definition-interop)
+
 ## Background
 
 Three main alternatives were identified to solve this problem:
