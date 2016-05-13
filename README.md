@@ -39,28 +39,30 @@ use Interop\Container\ServiceProvider;
 
 class MyServiceProvider implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'my_service' => 'getMyService',
+            'my_service' => function(ContainerInterface $container, callable $getPrevious = null) {
+                $dependency = $container->get('my_other_service');
+                return new MyService($dependency);
+            }
         ];
-    }
-    
-    public static function getMyService(ContainerInterface $container, callable $getPrevious = null)
-    {
-        $dependency = $container->get('my_other_service');
-    
-        return new MyService($dependency);
     }
 }
 ```
 
-The `getServices()` static method must return a list of all container entries the service provider wishes to register:
+The `getServices()` method must return a list of all container entries the service provider wishes to register:
 
 - the key is the entry name
-- the value is the name of the static method that will return the entry, aka the **factory method**
+- the value is a callable that will return the entry, aka the **factory**
 
-Factory methods must be public and static in the service provider class. They accept the following parameters:
+Factories have the following signature:
+
+```php
+function(ContainerInterface $container, callable $getPrevious = null)
+```
+
+Factories accept the following parameters:
 
 - the container (instance of `Interop\Container\ContainerInterface`)
 - a callable that returns the previous entry if overriding a previous entry, or `null` if not
@@ -70,15 +72,12 @@ The only difference between defining an entry from scratch or overriding/extendi
 If you know you will not be using the `$container` parameter or the `$getPrevious` parameter, you can omit them:
 
 ```php
-    public static function getMyService()
-    {
+    function() {
         return new MyService();
     }
 ```
 
-Each factory method is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
-
-A factory method should be **stateless**. The service created by the factory should only depend on the input parameters of the factory (`$container` and `$getPrevious`). If the factory needs to fetch parameters, those should be fetched from the container directly (see below).
+Each factory is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
 
 ### Values (aka parameters)
 
@@ -91,11 +90,11 @@ To alias a container entry to another, you can get the aliased entry from the co
 ```php
 class MyServiceProvider implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'my_service' => 'createMyService',
-            'alias' => 'resolveAlias',
+            'my_service' => [ MyServiceProvider::class, 'createMyService' ],
+            'alias' => [ MyServiceProvider::class, 'resolveAlias' ],
         ];
     }
     
@@ -117,10 +116,10 @@ Module A:
 ```php
 class A implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'foo' => 'getFoo',
+            'foo' => [ A::class,  'getFoo' ],
         ];
     }
     
@@ -136,10 +135,10 @@ Module B:
 ```php
 class B implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'foo' => 'getFoo',
+            'foo' => [ B::class, 'getFoo' ],
         ];
     }
     
@@ -161,10 +160,10 @@ Module A:
 ```php
 class A implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'logger' => 'getLogger',
+            'logger' => [ A::class, 'getLogger' ],
         ];
     }
     
@@ -180,10 +179,10 @@ Module B:
 ```php
 class B implements ServiceProvider
 {
-    public static function getServices()
+    public function getServices()
     {
         return [
-            'logger' => 'getLogger',
+            'logger' => [ B::class, 'getLogger' ],
         ];
     }
     
@@ -218,34 +217,34 @@ If you register the service providers in the correct order in your container (A 
 - [Stratigility Module](https://github.com/thecodingmachine/stratigility-harmony): A service provider for the Stratigility PSR-7 middleware.
 - [Whoops PSR-7 Middleware Module](https://github.com/thecodingmachine/whoops-middleware-universal-module): a service provider for the [Whoops](https://filp.github.io/whoops/) [PSR-7 middleware](https://github.com/franzliedke/whoops-middleware).
 
+## Best practices
+
+### Managing configuration
+
+The service created by a factory should only depend on the input parameters of the factory (`$container` and `$getPrevious`).
+If the factory needs to fetch parameters, those should be fetched from the container directly.
+
+```php
+class MyServiceProvider implements ServiceProvider
+{
+    public function getServices()
+    {
+        return [
+            'logger' => [ MyServiceProvider::class, 'createLogger' ],
+        ];
+    }
+    
+    public static function createLogger(ContainerInterface $container)
+    {
+        // The path to the log file is fetched from the container, not from the service provider state.
+        return new FileLogger($this->container->get('logFilePath'));
+    }
+}
+```
+
 ## FAQ
 
-#### Why static methods?
-
-It comes from the assumption that container configuration is stateless, i.e. it doesn't depend on anything.
-
-If container configuration is not stateless, it introduces problems for compiled containers (e.g. Symfony) or containers that perform caching (e.g. PHP-DI). Indeed, compiled containers and cached containers will call the `getServices` method in a process and the factories in another process. Relying on some state of the service provider class might therefore be a bad idea.
-
-Using static methods *conveys* the idea that everything should be stateless. Furthermore, since factories are supposed to be stateless, there is no need for a factory to rely on the service provider state (using `$this`), hence the idea to make factories static.
-
-Also static methods are easy to call, no need to instantiate any object which, when building a container in every request, is a bit of a performance advantage compared to having to create new objects for no reason.
-
-#### Why does the `getServices()` method returns an array of function names instead of an array of callables?
-
-An array of callables means anonymous functions could be returned, which is hard to adapt to compiled or cached containers.
-
-Even if we explicitly forbid closures (which would be weird in the first place), invokable objects or object methods would also hard to adapt with compiled/cached containers.
-
-So the only callables that would really be allowed would be:
-
-- function name
-- static method (['Class', 'method'])
-
-It seems a bit weird to use function for this use case (especially since they are not autoloadable). So we end up with static methods.
-
-Of course, we could allow the static methods to be in another class than the service provider, but it seems generally a good idea to have the services created in the service provider.
-
-#### Why inject a callable instead of the previous entry directly in factories?
+### Why inject a callable instead of the previous entry directly in factories?
 
 In a first version, service provider factories received the previous entry directly as a second parameter:
 
