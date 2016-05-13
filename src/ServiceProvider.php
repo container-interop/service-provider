@@ -3,7 +3,7 @@
 namespace Interop\Container;
 
 /**
- * Classes implementing this interface are service providers. Then can provide one or many entries to a container.
+ * A service provider provides entries to a container.
  */
 interface ServiceProvider
 {
