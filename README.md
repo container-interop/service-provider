@@ -8,7 +8,7 @@ This project tries to find a solution for cross-framework modules (aka bundles) 
 
 ## Background
 
-Three main alternatives were identified to solve this problem:
+Three main alternatives were identified to standardize container configuration:
 
 - standard PHP objects/interfaces representing container definitions
 - standard container configuration format (e.g. XML, …)
