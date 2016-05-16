@@ -1,14 +1,14 @@
-# Container-agnostic service providers
+# Standard service providers
 
-**Work in progress.**
+This project tries to find a solution for cross-framework modules (aka bundles) through **standard container configuration**. It is part of the [container-interop](https://github.com/container-interop/container-interop) group.
 
-This project is part of the [container-interop](https://github.com/container-interop/container-interop) group. It tries to find a solution for cross-framework modules (aka bundles) by the means of container-agnostic configuration.
+**Work in progress:** the project is currently experimental and is being tried in frameworks, containers and modules until considered viable. Until a 1.0.0 release the code in this repository is not stable. Expect changes breaking backward compatibility between minor versions (0.1.x -> 0.2.x).
 
 [![Gitter chat](https://badges.gitter.im/container-interop/definition-interop.png)](https://gitter.im/container-interop/definition-interop)
 
 ## Background
 
-Three main alternatives were identified to solve this problem:
+Three main alternatives were identified to standardize container configuration:
 
 - standard PHP objects/interfaces representing container definitions
 - standard container configuration format (e.g. XML, …)
@@ -23,12 +23,6 @@ This repository contains a proposition for **standard service providers** (servi
 - the standard is much simpler, which means it is easier to explain and understand
 - it is easier to use as it relies on plain old PHP code
 - it is easier to implement support in containers
-
-## Goal of this project
-
-This project is currently at its experimental phase: the goal is to try this standard in frameworks, containers and modules and iterate until it can be considered as a viable solution for **container-agnostic configuration**.
-
-Until a 1.0.0 release the code in this repository is not stable. Expect changes breaking backward compatibility between minor versions (0.1.x -> 0.2.x).
 
 ## Usage
 
