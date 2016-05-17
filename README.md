@@ -208,6 +208,7 @@ If you register the service providers in the correct order in your container (A 
 
 - [DBAL Module](https://github.com/thecodingmachine/dbal-universal-module): A module integrating [Doctrine DBAL](http://www.doctrine-project.org/projects/dbal.html) in an application using a service provider.
 - [Glide Module](https://github.com/mnapoli/glide-module): A module integrating Glide in an application using a service provider.
+- [Slim-framework Module](https://github.com/thecodingmachine/slim-service-provider): A module integrating Slim framework v3 using a service provider.
 - [Stratigility Module](https://github.com/thecodingmachine/stratigility-harmony): A service provider for the Stratigility PSR-7 middleware.
 - [Whoops PSR-7 Middleware Module](https://github.com/thecodingmachine/whoops-middleware-universal-module): a service provider for the [Whoops](https://filp.github.io/whoops/) [PSR-7 middleware](https://github.com/franzliedke/whoops-middleware).
 
