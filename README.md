@@ -269,6 +269,14 @@ Service providers usually take a container and configure it (e.g. in Pimple). Th
 
 These service providers provide factories for each container entry it provides. They do not require configuration methods on containers, so they can be made compatible with all/most of them. Each container entry is, in the end, just a callable to invoke, which most containers can do.
 
+### If everything is standardized is there a point to having many container implementations anymore?
+
+The goal of [`container-interop/container-interop`](https://github.com/container-interop/container-interop) is to decouple frameworks (or sometimes libraries) from containers, so it is meant to be used mainly **by frameworks**. End users (i.e. developers) can still choose their favorite containers and make use of all their specific features.
+
+The goal of this package (standard configuration) is to decouple modules from containers, so it is meant to be used **by developers writing modules**. End users (i.e. developers) can still choose their favorite containers and make use of all their specific features.
+
+Developers are encouraged to continue using their containers like before. However modules can now become reusable accross frameworks by using this standard configuration format.
+
 ## Puli integration
 
 The Puli integration is completely optional and not required to use this standard. It is only here to facilitate usage with Puli.
