@@ -73,6 +73,15 @@ If you know you will not be using the `$container` parameter or the `$getPreviou
 
 Each factory is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
 
+### Consuming service providers
+
+Service providers are typically consumed by containers.
+
+For containers implementing *container-interop/container-interop* or *PSR-11*:
+
+- A call to `get` on an entry defined in a service-provider MUST always return the same value.
+- The container MUST cache the result returned by the factory and return the cached entry.
+
 ### Values (aka parameters)
 
 A service provider can provide PHP objects (services) as well as any value. Simply return the value you wish from factory methods.
