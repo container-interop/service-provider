@@ -26,12 +26,12 @@ This repository contains a proposition for **standard service providers** (servi
 
 ## Usage
 
-To declare a service provider, simply implement the `ServiceProvider` interface.
+To declare a service provider, simply implement the `ServiceProviderInterface` interface.
 
 ```php
-use Interop\Container\ServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 
-class MyServiceProvider implements ServiceProvider
+class MyServiceProvider implements ServiceProviderInterface
 {
     public function getServices()
     {
@@ -91,7 +91,7 @@ A service provider can provide PHP objects (services) as well as any value. Simp
 To alias a container entry to another, you can get the aliased entry from the container and return it:
 
 ```php
-class MyServiceProvider implements ServiceProvider
+class MyServiceProvider implements ServiceProviderInterface
 {
     public function getServices()
     {
@@ -117,7 +117,7 @@ Overriding an entry defined in another service provider is as easy as defining i
 Module A:
 
 ```php
-class A implements ServiceProvider
+class A implements ServiceProviderInterface
 {
     public function getServices()
     {
@@ -136,7 +136,7 @@ class A implements ServiceProvider
 Module B:
 
 ```php
-class B implements ServiceProvider
+class B implements ServiceProviderInterface
 {
     public function getServices()
     {
@@ -161,7 +161,7 @@ Extending an entry before it is returned by the container is very similar to ove
 Module A:
 
 ```php
-class A implements ServiceProvider
+class A implements ServiceProviderInterface
 {
     public function getServices()
     {
@@ -180,7 +180,7 @@ class A implements ServiceProvider
 Module B:
 
 ```php
-class B implements ServiceProvider
+class B implements ServiceProviderInterface
 {
     public function getServices()
     {
@@ -233,7 +233,7 @@ The service created by a factory should only depend on the input parameters of t
 If the factory needs to fetch parameters, those should be fetched from the container directly.
 
 ```php
-class MyServiceProvider implements ServiceProvider
+class MyServiceProvider implements ServiceProviderInterface
 {
     public function getServices()
     {
