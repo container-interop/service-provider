@@ -26,29 +26,21 @@ This repository contains a proposition for **standard service providers** (servi
 
 ## Usage
 
-To declare a service provider, simply implement the `ServiceProvider` interface.
+A service provider is **an array of callables**.
 
 ```php
-use Interop\Container\ServiceProvider;
-
-class MyServiceProvider implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'my_service' => function(ContainerInterface $container, callable $getPrevious = null) {
-                $dependency = $container->get('my_other_service');
-                return new MyService($dependency);
-            }
-        ];
+$provider = [
+    'my_service' => function (ContainerInterface $container, callable $getPrevious = null) {
+        $dependency = $container->get('my_other_service');
+        return new MyService($dependency);
     }
-}
+];
 ```
 
-The `getServices()` method must return a list of all container entries the service provider wishes to register:
+Each item is a container entry to register:
 
 - the key is the entry name
-- the value is a callable that will return the entry, aka the **factory**
+- the value is a callable that returns the entry, aka a **factory**
 
 Factories have the following signature:
 
@@ -66,12 +58,12 @@ The only difference between defining an entry from scratch or overriding/extendi
 If you know you will not be using the `$container` parameter or the `$getPrevious` parameter, you can omit them:
 
 ```php
-    function() {
-        return new MyService();
-    }
+function() {
+    return new MyService();
+}
 ```
 
-Each factory is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
+Each factory is responsible for returning a given entry of the container. Nothing should be cached by factories, this is the responsibility of the container.
 
 ### Consuming service providers
 
@@ -84,30 +76,29 @@ For containers implementing *container-interop/container-interop* or *PSR-11*:
 
 ### Values (aka parameters)
 
-A service provider can provide PHP objects (services) as well as any value. Simply return the value you wish from factory methods.
+A service provider can provide PHP objects (services) as well as any value. Simply return the value you wish from factories:
+
+```php
+$provider = [
+    'db_host' => function () {
+        return 'localhost';
+    }
+];
+```
 
 ### Aliases
 
 To alias a container entry to another, you can get the aliased entry from the container and return it:
 
 ```php
-class MyServiceProvider implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'my_service' => [ MyServiceProvider::class, 'createMyService' ],
-            'alias' => [ MyServiceProvider::class, 'resolveAlias' ],
-        ];
-    }
-    
-    // ...
-    
-    public static function resolveAlias(ContainerInterface $container)
-    {
+$provider = [
+    'my_service' => function () {
+        return ...;
+    },
+    'alias' => function (ContainerInterface $container) {
         return $container->get('my_service');
     }
-}
+];
 ```
 
 ### Entry overriding
@@ -117,39 +108,21 @@ Overriding an entry defined in another service provider is as easy as defining i
 Module A:
 
 ```php
-class A implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'foo' => [ A::class,  'getFoo' ],
-        ];
-    }
-    
-    public static function getFoo()
-    {
+$providerA = [
+    'foo' => function () {
         return 'abc';
     }
-}
+];
 ```
 
 Module B:
 
 ```php
-class B implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'foo' => [ B::class, 'getFoo' ],
-        ];
-    }
-    
-    public static function getFoo()
-    {
+$providerB = [
+    'foo' => function () {
         return 'def';
     }
-}
+];
 ```
 
 If you register the service providers in the correct order in your container (A first, then B), then the entry `foo` will be `'def'` because B's definition will override A's.
@@ -161,46 +134,28 @@ Extending an entry before it is returned by the container is very similar to ove
 Module A:
 
 ```php
-class A implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'logger' => [ A::class, 'getLogger' ],
-        ];
-    }
-    
-    public static function getLogger()
-    {
+$providerA = [
+    'logger' => function () {
         return new Logger;
     }
-}
+];
 ```
 
 Module B:
 
 ```php
-class B implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'logger' => [ B::class, 'getLogger' ],
-        ];
-    }
-    
-    public static function getLogger(ContainerInterface $container, callable $getPrevious = null)
-    {
+$providerB = [
+    'logger' => function (ContainerInterface $container, callable $getPrevious = null) {
         // Get the previous entry
         $previous = $getPrevious();
 
         // Register a new log handler
         $previous->addHandler(new SyslogHandler());
-    
+
         // Return the object that we modified
         return $previous;
     }
-}
+];
 ```
 
 If you register the service providers in the correct order in your container (A first, then B), the logger will be first created by `A` then a new handler will be registered on it by `B`.
@@ -233,21 +188,12 @@ The service created by a factory should only depend on the input parameters of t
 If the factory needs to fetch parameters, those should be fetched from the container directly.
 
 ```php
-class MyServiceProvider implements ServiceProvider
-{
-    public function getServices()
-    {
-        return [
-            'logger' => [ MyServiceProvider::class, 'createLogger' ],
-        ];
-    }
-    
-    public static function createLogger(ContainerInterface $container)
-    {
+$provider = [
+    'logger' => function (ContainerInterface $container) {
         // The path to the log file is fetched from the container, not from the service provider state.
         return new FileLogger($this->container->get('logFilePath'));
     }
-}
+];
 ```
 
 ## FAQ
@@ -257,10 +203,9 @@ class MyServiceProvider implements ServiceProvider
 In a first version, service provider factories received the previous entry directly as a second parameter:
 
 ```php
-    public static function getMyService(ContainerInterface $container, $previous = null)
-    {
-        // ...
-    }
+function (ContainerInterface $container, $previous = null) {
+    // ...
+}
 ```
 
 That caused 2 problems:
