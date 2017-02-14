@@ -18,7 +18,7 @@ interface ServiceProvider
      *
      * About factories parameters:
      *
-     * - the container (instance of `Interop\Container\ContainerInterface`)
+     * - the container (instance of `Psr\Container\ContainerInterface`)
      * - a callable that returns the previous entry if overriding a previous entry, or `null` if not
      *
      * @return callable[]
