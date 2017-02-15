@@ -58,7 +58,7 @@ function(ContainerInterface $container, callable $getPrevious = null)
 
 Factories accept the following parameters:
 
-- the container (instance of `Interop\Container\ContainerInterface`)
+- the container (instance of `Psr\Container\ContainerInterface`)
 - a callable that returns the previous entry if overriding a previous entry, or `null` if not
 
 The only difference between defining an entry from scratch or overriding/extending a previous entry is that the `$getPrevious` parameter will be either a `callable` or `null`. Factories are free to *use it or ignore it* if it's not `null`.
@@ -100,9 +100,9 @@ class MyServiceProvider implements ServiceProviderInterface
             'alias' => [ MyServiceProvider::class, 'resolveAlias' ],
         ];
     }
-    
+
     // ...
-    
+
     public static function resolveAlias(ContainerInterface $container)
     {
         return $container->get('my_service');
@@ -125,7 +125,7 @@ class A implements ServiceProviderInterface
             'foo' => [ A::class,  'getFoo' ],
         ];
     }
-    
+
     public static function getFoo()
     {
         return 'abc';
@@ -144,7 +144,7 @@ class B implements ServiceProviderInterface
             'foo' => [ B::class, 'getFoo' ],
         ];
     }
-    
+
     public static function getFoo()
     {
         return 'def';
@@ -169,7 +169,7 @@ class A implements ServiceProviderInterface
             'logger' => [ A::class, 'getLogger' ],
         ];
     }
-    
+
     public static function getLogger()
     {
         return new Logger;
@@ -188,7 +188,7 @@ class B implements ServiceProviderInterface
             'logger' => [ B::class, 'getLogger' ],
         ];
     }
-    
+
     public static function getLogger(ContainerInterface $container, callable $getPrevious = null)
     {
         // Get the previous entry
@@ -196,7 +196,7 @@ class B implements ServiceProviderInterface
 
         // Register a new log handler
         $previous->addHandler(new SyslogHandler());
-    
+
         // Return the object that we modified
         return $previous;
     }
@@ -241,7 +241,7 @@ class MyServiceProvider implements ServiceProviderInterface
             'logger' => [ MyServiceProvider::class, 'createLogger' ],
         ];
     }
-    
+
     public static function createLogger(ContainerInterface $container)
     {
         // The path to the log file is fetched from the container, not from the service provider state.
