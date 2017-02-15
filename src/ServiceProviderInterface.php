@@ -5,7 +5,7 @@ namespace Interop\Container;
 /**
  * A service provider provides entries to a container.
  */
-interface ServiceProvider
+interface ServiceProviderInterface
 {
     /**
      * Returns a list of all container entries registered by this service provider.
