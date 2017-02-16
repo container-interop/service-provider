@@ -33,19 +33,31 @@ use Interop\Container\ServiceProviderInterface;
 
 class MyServiceProvider implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
-            'my_service' => function(ContainerInterface $container, callable $getPrevious = null) {
+            'my_service' => function(ContainerInterface $container) {
                 $dependency = $container->get('my_other_service');
                 return new MyService($dependency);
             }
         ];
     }
+    
+    public function getExtensions()
+    {
+        return [
+                'my_extended_service' => function(ContainerInterface $container, $extendedService) {
+                    $extendedService->registerExtension($container->get('my_service'));
+                    return $extendedService;
+                }
+            ];
+    }
 }
 ```
 
-The `getServices()` method must return a list of all container entries the service provider wishes to register:
+### Factories
+
+The `getFactories()` method must return a list of all container entries the service provider wishes to register:
 
 - the key is the entry name
 - the value is a callable that will return the entry, aka the **factory**
@@ -53,17 +65,36 @@ The `getServices()` method must return a list of all container entries the servi
 Factories have the following signature:
 
 ```php
-function(ContainerInterface $container, callable $getPrevious = null)
+function(ContainerInterface $container) : mixed
 ```
 
-Factories accept the following parameters:
+Factories accept one parameter:
 
 - the container (instance of `Psr\Container\ContainerInterface`)
-- a callable that returns the previous entry if overriding a previous entry, or `null` if not
 
-The only difference between defining an entry from scratch or overriding/extending a previous entry is that the `$getPrevious` parameter will be either a `callable` or `null`. Factories are free to *use it or ignore it* if it's not `null`.
+Each factory is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
 
-If you know you will not be using the `$container` parameter or the `$getPrevious` parameter, you can omit them:
+### Extensions
+
+The `getExtensions()` method must return a list of all container entries the service provider wishes to extend:
+
+- the key is the entry name
+- the value is a callable that will return the entry, aka the **extension**
+
+Extensions have the following signature:
+
+```php
+function(ContainerInterface $container, $previous [= null]) : mixed
+```
+
+Extensions accept the following parameters:
+
+- the container (instance of `Psr\Container\ContainerInterface`)
+- the service to be extended. This parameter CAN be typehinted on the expected service type and CAN be nullable.
+
+### More about parameters
+
+If you know you will not be using the `$container` parameter or the `$previous` parameter, you can omit them:
 
 ```php
     function() {
@@ -71,20 +102,35 @@ If you know you will not be using the `$container` parameter or the `$getPreviou
     }
 ```
 
-Each factory is responsible for returning a given entry of the container. Nothing should be cached by service providers, this is the responsibility of the container.
-
 ### Consuming service providers
 
 Service providers are typically consumed by containers.
 
-For containers implementing *container-interop/container-interop* or *PSR-11*:
+For containers implementing *PSR-11*:
 
 - A call to `get` on an entry defined in a service-provider MUST always return the same value.
 - The container MUST cache the result returned by the factory and return the cached entry.
 
 ### Values (aka parameters)
 
-A service provider can provide PHP objects (services) as well as any value. Simply return the value you wish from factory methods.
+A factory/extension can provide PHP objects (services) as well as any value. Simply return the value you wish from factory methods.
+
+### Returning `null`
+
+A factory/extension can return `null`. In this case, the container consuming the service provider MUST NOT register any service.
+
+```php
+    public function getFactories()
+    {
+        return [
+            'my_service' => function() { return null; }
+        ];
+    }
+```
+
+```php
+$container->has('my_service') // Returns false
+```
 
 ### Aliases
 
@@ -93,12 +139,17 @@ To alias a container entry to another, you can get the aliased entry from the co
 ```php
 class MyServiceProvider implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
             'my_service' => [ MyServiceProvider::class, 'createMyService' ],
             'alias' => [ MyServiceProvider::class, 'resolveAlias' ],
         ];
+    }
+
+    public function getExtensions()
+    {
+        return [];
     }
 
     // ...
@@ -119,11 +170,16 @@ Module A:
 ```php
 class A implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
             'foo' => [ A::class,  'getFoo' ],
         ];
+    }
+
+    public function getExtensions()
+    {
+        return [];
     }
 
     public static function getFoo()
@@ -138,11 +194,16 @@ Module B:
 ```php
 class B implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
             'foo' => [ B::class, 'getFoo' ],
         ];
+    }
+
+    public function getExtensions()
+    {
+        return [];
     }
 
     public static function getFoo()
@@ -156,19 +217,21 @@ If you register the service providers in the correct order in your container (A 
 
 ### Entry extension
 
-Extending an entry before it is returned by the container is very similar to overriding it.
+Extending an entry before it is returned by the container is done via the `getExtensions` method.
 
 Module A:
 
 ```php
 class A implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
             'logger' => [ A::class, 'getLogger' ],
         ];
     }
+    
+    // ...
 
     public static function getLogger()
     {
@@ -182,28 +245,78 @@ Module B:
 ```php
 class B implements ServiceProviderInterface
 {
-    public function getServices()
+    // ...
+    
+    public function getExtensions()
     {
         return [
             'logger' => [ B::class, 'getLogger' ],
         ];
     }
 
-    public static function getLogger(ContainerInterface $container, callable $getPrevious = null)
+    public static function getLogger(ContainerInterface $container, $logger)
     {
-        // Get the previous entry
-        $previous = $getPrevious();
-
         // Register a new log handler
-        $previous->addHandler(new SyslogHandler());
+        $logger->addHandler(new SyslogHandler());
 
         // Return the object that we modified
-        return $previous;
+        return $logger;
     }
 }
 ```
 
-If you register the service providers in the correct order in your container (A first, then B), the logger will be first created by `A` then a new handler will be registered on it by `B`.
+The second parameter of extensions SHOULD use type-hinting when applicable.
+
+```php
+public static function getLogger(ContainerInterface $container, Logger $logger)
+```
+
+If a container passes a service that does not match the type hint, a `TypeError` will be thrown while bootstrapping the Container (in PHP 7+), or a catchable fatal error in PHP 5.
+
+The second parameter of extensions CAN be nullable.
+
+```php
+public static function getLogger(ContainerInterface $container, Logger $logger = null)
+public static function getLogger(ContainerInterface $container, ?Logger $logger)
+```
+
+If an extension is defined for a service that does not exist, null will be passed as a second argument.
+
+```php
+class B implements ServiceProviderInterface
+{
+    // ...
+    public function getExtensions()
+    {
+        return [
+            'logger' => [ B::class, 'getLogger' ],
+        ];
+    }
+
+    public static function getLogger(ContainerInterface $container, ?Logger $logger)
+    {
+        // If no logger service is defined, let's simply ignore this extension (instead of throwing an error)
+        if ($logger === null) {
+            return null;
+        }
+        
+        // Register a new log handler
+        $logger->addHandler(new SyslogHandler());
+
+        // Return the object that we modified
+        return $logger;
+    }
+}
+```
+
+### Consuming service providers
+
+Containers consuming service providers MUST consume them in 2 passes.
+
+1. In the first pass, the container calls the `getFactories` method of all service providers.
+2. In the second pass, the container calls the `getExtensions` method of all service providers.
+
+As a side-effect, even if service provider B is declared *before* service provider A, it can still extend services declared in service provider A.
 
 ## Compatible projects
 ### Projects consuming *service providers*
@@ -235,11 +348,16 @@ If the factory needs to fetch parameters, those should be fetched from the conta
 ```php
 class MyServiceProvider implements ServiceProviderInterface
 {
-    public function getServices()
+    public function getFactories()
     {
         return [
             'logger' => [ MyServiceProvider::class, 'createLogger' ],
         ];
+    }
+    
+    public function getExtensions()
+    {
+        return [];
     }
 
     public static function createLogger(ContainerInterface $container)
@@ -251,26 +369,6 @@ class MyServiceProvider implements ServiceProviderInterface
 ```
 
 ## FAQ
-
-### Why inject a callable instead of the previous entry directly in factories?
-
-In a first version, service provider factories received the previous entry directly as a second parameter:
-
-```php
-    public static function getMyService(ContainerInterface $container, $previous = null)
-    {
-        // ...
-    }
-```
-
-That caused 2 problems:
-
-- it was inefficient since it caused the container to resolve all the previous entries that might exist, even when they were overridden by another service provider
-- when the entry name was a class name, autowiring containers would try to resolve the previous entry using autowiring: when some parameters could not be resolved by the container, there would be exceptions
-
-By injecting a callable that returns the previous entry, that makes it *lazily loaded*. That is both more efficient and avoids most problems with autowiring containers.
-
-For a more detailed explanation you can read the full discussion in the [issue #9](https://github.com/container-interop/service-provider/issues/9).
 
 ### Why does the service provider not configure the container instead of returning entries?
 
