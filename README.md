@@ -290,12 +290,29 @@ Developers are encouraged to continue using their containers like before. Howeve
 
 The Puli integration is completely optional and not required to use this standard. It is only here to facilitate usage with Puli.
 
+Using Puli, packages can declare the service providers they contain. Then, containers can automatically retrieve the list of service providers.
+
 This package provides a [Puli *binding type*](http://docs.puli.io/en/latest/discovery/getting-started.html): `container-interop/service-provider`. Modules using Puli and implementing this standard can register service providers (fully qualified class names) through this binding type.
 
 This way, frameworks or applications based on Puli can discover service providers automatically.
 
-To register your service provider, simply use Puli's `bind` command:
+Service provider authors can register their service provider with those 2 simple steps:
+
+In `composer.json`, add the following dependencies in `require-dev`:
+
+```json
+{
+    ...
+    "require-dev": {
+        "puli/cli": "^1.0",
+        "puli/composer-plugin": "^1.0"
+    },
+    ...
+}
+```
+
+Then, simply use Puli's `bind` command:
 
 ```sh
-puli bind --class Acme\\Foo\\MyServiceProvider container-interop/service-provider
+vendor/bin/puli bind --class Acme\\Foo\\MyServiceProvider container-interop/service-provider
 ```
