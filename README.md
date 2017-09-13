@@ -117,7 +117,7 @@ A factory/extension can provide PHP objects (services) as well as any value. Sim
 
 ### Returning `null`
 
-A factory/extension can return `null`. In this case, the container consuming the service provider MUST NOT register any service.
+A factory/extension can return `null`. In this case, the container consuming the service provider MUST register a service that is `null`.
 
 ```php
     public function getFactories()
@@ -129,7 +129,8 @@ A factory/extension can return `null`. In this case, the container consuming the
 ```
 
 ```php
-$container->has('my_service') // Returns false
+$container->has('my_service') // Returns true
+$container->get('my_service') // Returns null
 ```
 
 ### Aliases
