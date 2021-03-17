@@ -2,6 +2,8 @@
 
 namespace Interop\Container;
 
+use Psr\Container\ContainerInterface;
+
 /**
  * A factory optionally implements this interface to reflect it's dependencies.
  */
