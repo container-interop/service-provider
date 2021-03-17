@@ -13,4 +13,13 @@ interface ServiceInterface
      * @return string[] A list of strings each representing the key of a service.
      */
     public function getDependencies(): array;
+    
+    /**
+     * Creates the entry, using the given container to resolve dependencies.
+     * 
+     * @param ContainerInterface $container The container that should be used to resolve dependencies
+     *
+     * @return mixed The created entry
+     */
+    public function __invoke(ContainerInterface $container);
 }
