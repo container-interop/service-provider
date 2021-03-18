@@ -13,10 +13,11 @@ interface ServiceProviderInterface
      * - the key is the entry name
      * - the value is a callable that will return the entry, aka the **factory**
      *
-     * Factories have the following signature:
-     *        function(\Psr\Container\ContainerInterface $container)
+     * A factory is an instance of {@see FactoryDefinitionInterface}, or a `callable` with the following signature:
+     * 
+     *     function(\Psr\Container\ContainerInterface $container)
      *
-     * @return callable[]
+     * @return (callable|FactoryDefinitionInterface)[]
      */
     public function getFactories();
 
@@ -26,7 +27,8 @@ interface ServiceProviderInterface
      * - the key is the entry name
      * - the value is a callable that will return the modified entry
      *
-     * Callables have the following signature:
+     * An extension is an instance of {@see ExtensionDefinitionInterface}, or a `callable` with the following signature:
+     * 
      *        function(Psr\Container\ContainerInterface $container, $previous)
      *     or function(Psr\Container\ContainerInterface $container, $previous = null)
      *
@@ -35,7 +37,7 @@ interface ServiceProviderInterface
      * - the container (instance of `Psr\Container\ContainerInterface`)
      * - the entry to be extended. If the entry to be extended does not exist and the parameter is nullable, `null` will be passed.
      *
-     * @return callable[]
+     * @return (callable|ExtensionDefinitionInterface)[]
      */
     public function getExtensions();
 }
