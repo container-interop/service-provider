@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 interface ExtensionDefinitionInterface extends ServiceDefinitionInterface
 {
     /**
-     * Extends a given service/entry, using the given container to resolve dependencies.
+     * Extends a given service, using the given container to resolve dependencies.
      * 
      * @param ContainerInterface $container The container that should be used to resolve dependencies
      * @param mixed              $previous  The previous service/entry
