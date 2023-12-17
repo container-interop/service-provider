@@ -15,7 +15,7 @@ interface ExtensionDefinitionInterface extends ServiceDefinitionInterface
      * @param ContainerInterface $container The container that should be used to resolve dependencies
      * @param mixed              $previous  The previous service
      *
-     * @return mixed The extended service/entry
+     * @return mixed The extended service.
      */
     public function __invoke(ContainerInterface $container, $previous);
 }
