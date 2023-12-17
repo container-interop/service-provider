@@ -19,7 +19,7 @@ interface ServiceProviderInterface
      *
      * @return (callable|FactoryDefinitionInterface)[]
      */
-    public function getFactories();
+    public function getFactories(): array;
 
     /**
      * Returns a list of all container entries extended by this service provider.
@@ -39,5 +39,5 @@ interface ServiceProviderInterface
      *
      * @return (callable|ExtensionDefinitionInterface)[]
      */
-    public function getExtensions();
+    public function getExtensions(): array;
 }

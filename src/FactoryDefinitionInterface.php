@@ -16,5 +16,5 @@ interface FactoryDefinitionInterface extends ServiceDefinitionInterface
      *
      * @return mixed The created entry
      */
-    public function __invoke(ContainerInterface $container);
+    public function __invoke(ContainerInterface $container): mixed;
 }

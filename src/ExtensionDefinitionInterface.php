@@ -17,5 +17,5 @@ interface ExtensionDefinitionInterface extends ServiceDefinitionInterface
      *
      * @return mixed The extended service.
      */
-    public function __invoke(ContainerInterface $container, $previous);
+    public function __invoke(ContainerInterface $container, mixed $previous): mixed;
 }
