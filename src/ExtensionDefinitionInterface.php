@@ -13,7 +13,7 @@ interface ExtensionDefinitionInterface extends ServiceDefinitionInterface
      * Extends a given service, using the given container to resolve dependencies.
      * 
      * @param ContainerInterface $container The container that should be used to resolve dependencies
-     * @param mixed              $previous  The previous service/entry
+     * @param mixed              $previous  The previous service
      *
      * @return mixed The extended service/entry
      */
