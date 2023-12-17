@@ -3,7 +3,7 @@
 namespace Interop\Container;
 
 /**
- * This interface defines the common facet of service factories and extensions.
+ * Represents a service definition.
  */
 interface ServiceDefinitionInterface
 {
