@@ -45,9 +45,11 @@ Factories have the following signature:
 function(Psr\Container\ContainerInterface $container): mixed
 ```
 
-The factory MUST return a newly created service instance.
+A factory MUST return a newly created service instance.
 
-The factory SHOULD NOT cache anything or store state. Caching and state are the responsibility of the container.
+A factory MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies.
+
+A factory SHOULD NOT cache anything or store state. Caching and state are the responsibility of the container.
 
 ### 1.3. Extensions
 
@@ -65,7 +67,9 @@ Where `$service` is the existing service instance.
 
 The `$service` parameter MAY be typehinted as required by the extension, and MAY be nullable.
 
-The extension MUST return the modified service instance.
+An extension MUST return the modified service instance.
+
+An extension MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies, and (as stated in section 1.3) the existing service could intentionally be `null`.
 
 ### 1.4. Dependencies
 
