@@ -1,8 +1,12 @@
-# Standard service providers
+# Standard Service Providers
 
-This project tries to find a solution for cross-framework modules (aka bundles) through **standard container configuration**. It is part of the [container-interop](https://github.com/container-interop/container-interop) group.
+This project attempts to define a common standard for service providers, aka "bundles" or "modules" in various frameworks.
 
-**Work in progress:** the project is currently experimental and is being tried in frameworks, containers and modules until considered viable. Until a 1.0.0 release the code in this repository is not stable. Expect changes breaking backward compatibility between minor versions (0.1.x -> 0.2.x).
+Service providers are classes that provide service definitions to a [PSR-11](https://www.php-fig.org/psr/psr-11/) container.
+
+The PSR depends on the PSR-11 [Container Interface](https://www.php-fig.org/psr/psr-11/#31-psrcontainercontainerinterface). Service providers operate on PSR-11 compatible containers.
+
+**Work in progress:** the project is currently experimental and is being tried in frameworks, containers and modules until considered viable. Until a 1.0.0 release, the code in this repository is not stable. Expect breaking changes between versions such as `0.1.x` and `0.2.0`.
 
 ## Proposal
 
