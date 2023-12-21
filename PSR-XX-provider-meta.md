@@ -52,7 +52,15 @@ The goals of standardizing service providers are:
 - Easy implementation for containers.
 - Promote separation of configuration from application code.
 
-## 4. Purpose
+## 4. Rationale
+
+Service providers usually take a container and configure it directly, via a container-specific configuration API.
+
+The configuration API is a core part of what distinguishes container implementations. Standardizing configuration would erode the differences between containers, which would remove much of the reason for their existence. The goal here is interoperability through a common format, not removing the value of different containers.
+
+The goal is to decouple **modules** from containers through a standard format. This allows modules to be reusable across frameworks. The choice of which container implementations to use is still open to developers.
+
+## 5. Purpose
 
 TODO ^ Purpose, Intent, Positioning, Relationship with existing ecosystem, or something different?
 
@@ -67,7 +75,7 @@ While hand-authoring PSR service providers is possible, the expectation is that 
 
 The choice of which container and provider implementations to use for application services is left open to developers.
 
-## 5. Service Discovery
+## 6. Service Discovery
 
 Integration with projects like Puli was explored, for automatic discovery and binding of service providers.
 
