@@ -10,7 +10,7 @@ The PSR depends on the PSR-11 [Container Interface](https://www.php-fig.org/psr/
 
 ## Proposal
 
-Refer to the [current PSR draf](./PSR-XX-provider.md) for the concrete proposal.
+Refer to the [current PSR draft](./PSR-XX-provider.md) for the concrete proposal.
 
 ## Background
 
