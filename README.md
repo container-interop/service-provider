@@ -4,8 +4,6 @@ This project tries to find a solution for cross-framework modules (aka bundles) 
 
 **Work in progress:** the project is currently experimental and is being tried in frameworks, containers and modules until considered viable. Until a 1.0.0 release the code in this repository is not stable. Expect changes breaking backward compatibility between minor versions (0.1.x -> 0.2.x).
 
-[![Gitter chat](https://badges.gitter.im/container-interop/definition-interop.png)](https://gitter.im/container-interop/definition-interop)
-
 ## Background
 
 Refer to the [PSR meta document](./PSR-XX-provider-meta.md) for the historical background of this proposal.
