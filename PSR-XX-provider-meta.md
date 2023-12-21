@@ -69,8 +69,8 @@ The choice of which container and provider implementations to use for applicatio
 
 ## 5. Service Discovery
 
-Integration with projects like Puli was provided for discovery and binding service providers. This was optional, and service providers can be used without it.
+Integration with projects like Puli was explored, for automatic discovery and binding of service providers.
 
 Puli is EOL by now, but served as proof of concept with regards to the potential for service discovery, whether this be framework-specific, or via a future standard.
 
-Service discovery (as a feature of the standard) is outside the scope of this PSR - a separate PSR could potentially address this in the future.
+Service discovery (as a feature of the standard) is outside the scope of this PSR.
