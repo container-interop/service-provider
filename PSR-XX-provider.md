@@ -134,7 +134,3 @@ Calling a factory or extension multiple times with the same container instance S
 ### 4.3. Declaring Dependencies
 
 Factories and extensions SHOULD declare their dependencies through `FactoryDefinitionInterface` and `ExtensionDefinitionInterface` rather than directly accessing the container. This allows containers to validate dependencies during configuration.
-
-### 4.4. Service Discovery
-
-TODO Puli is a dead project, so we do not currently have a story for service discovery. This was a priority for some of the members of this group - if this PSR needs to say something about service discovery, this topic likely needs further discussion.

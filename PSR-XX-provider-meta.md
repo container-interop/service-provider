@@ -73,6 +73,4 @@ Integration with projects like Puli was provided for discovery and binding servi
 
 Puli is EOL by now, but served as proof of concept with regards to the potential for service discovery, whether this be framework-specific, or via a future standard.
 
-Service discovery (as a feature of the standard) is outside the scope of this PSR.
-
-TODO ^ does the working group agree with this? should we discuss the addition of an (optional) means of providing service discovery? this could probably be left up to a separate future PSR, and the nothing about the PSR in it's current form depends on service discovery.
+Service discovery (as a feature of the standard) is outside the scope of this PSR - a separate PSR could potentially address this in the future.

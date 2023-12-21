@@ -384,17 +384,3 @@ The goal of [`container-interop/container-interop`](https://github.com/container
 The goal of this package (standard configuration) is to decouple modules from containers, so it is meant to be used **by developers writing modules**. End users (i.e. developers) can still choose their favorite containers and make use of all their specific features.
 
 Developers are encouraged to continue using their containers like before. However modules can now become reusable accross frameworks by using this standard configuration format.
-
-## Puli integration
-
-The Puli integration is completely optional and not required to use this standard. It is only here to facilitate usage with Puli.
-
-This package provides a [Puli *binding type*](http://docs.puli.io/en/latest/discovery/getting-started.html): `container-interop/service-provider`. Modules using Puli and implementing this standard can register service providers (fully qualified class names) through this binding type.
-
-This way, frameworks or applications based on Puli can discover service providers automatically.
-
-To register your service provider, simply use Puli's `bind` command:
-
-```sh
-puli bind --class Acme\\Foo\\MyServiceProvider container-interop/service-provider
-```
