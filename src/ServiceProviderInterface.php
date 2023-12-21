@@ -2,6 +2,8 @@
 
 namespace Interop\Container;
 
+use Psr\Container\ContainerInterface;
+
 /**
  * A service provider provides entries to a container.
  */
@@ -17,7 +19,7 @@ interface ServiceProviderInterface
      * 
      *     function(\Psr\Container\ContainerInterface $container)
      *
-     * @return (callable|FactoryDefinitionInterface)[]
+     * @return ((callable(ContainerInterface):mixed)|FactoryDefinitionInterface)[]
      */
     public function getFactories(): array;
 
@@ -37,7 +39,7 @@ interface ServiceProviderInterface
      * - the container (instance of `Psr\Container\ContainerInterface`)
      * - the entry to be extended. If the entry to be extended does not exist and the parameter is nullable, `null` will be passed.
      *
-     * @return (callable|ExtensionDefinitionInterface)[]
+     * @return ((callable(ContainerInterface,mixed):mixed)|ExtensionDefinitionInterface)[]
      */
     public function getExtensions(): array;
 }
