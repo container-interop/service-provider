@@ -298,15 +298,6 @@ class B implements ServiceProviderInterface
 }
 ```
 
-### Consuming service providers
-
-Containers consuming service providers MUST consume them in 2 passes.
-
-1. In the first pass, the container calls the `getFactories` method of all service providers.
-2. In the second pass, the container calls the `getExtensions` method of all service providers.
-
-As a side-effect, even if service provider B is declared *before* service provider A, it can still extend services declared in service provider A.
-
 ## Compatible projects
 ### Projects consuming *service providers*
 
