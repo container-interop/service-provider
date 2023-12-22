@@ -35,7 +35,7 @@ The `Psr\Provider\ServiceProviderInterface` exposes two methods:
 
 ### 1.2. Factories
 
-A factory is a callable that accepts a container and returns a service. 
+A factory is a callable that accepts a container and returns a "service", which (in keeping with [PSR-11][]) may be any object/value. (a `mixed` value.)
 
 The `getFactories` method MUST return an associative array with the service identifier as the key and the factory as the value.
 
