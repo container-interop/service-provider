@@ -47,6 +47,8 @@ function(Psr\Container\ContainerInterface $container): mixed
 
 A factory MUST return a newly created service instance.
 
+A factory MAY omit the `$container` parameter, if unused.
+
 A factory MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies.
 
 A factory SHOULD NOT cache anything or store state. Caching and state are the responsibility of the container.
@@ -68,6 +70,8 @@ Where `$service` is the existing service instance.
 The `$service` parameter MAY be typehinted as required by the extension, and MAY be nullable.
 
 An extension MUST return the modified service instance.
+
+TODO "A extension MAY omit the `$container` and `$service` parameters, if unused." - this would be similar to what is stated about factories, but it likely wouldn't make much sense, unless the order of the `$container` and `$service` parameters were reversed? see #50
 
 An extension MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies, and (as stated in section 1.3) the existing service could intentionally be `null`.
 
