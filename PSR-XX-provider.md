@@ -81,6 +81,25 @@ public function getDependencies(): array
 
 This allows containers to validate dependencies when registering services.
 
+### 1.5. Importing Definitions
+
+When importing service definitions from a provider, containers:
+
+- MUST replace existing factory entries when importing factories from the provider
+- MUST preserve existing extensions when replacing factory entries 
+- MUST append imported extensions from the provider to existing extensions
+- MUST NOT remove existing extensions when importing extensions
+
+#### Example:
+
+* Container has factory **A** and extension **C** for service `logger`
+* Provider defines factory **B** for `logger` and extension **D** for `logger`
+
+After importing from the provider, the container will contain:
+
+* Factory **B** for `logger` (because factory **A** was replaced)
+* Extensions **C** and **D** for `logger` (**D** was appended after **C**)
+
 ## 2. Interfaces
 
 ### 2.1. `Psr\Provider\ServiceProviderInterface`
