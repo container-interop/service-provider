@@ -57,22 +57,12 @@ class MyServiceProvider implements ServiceProviderInterface
     public function getFactories()
     {
         return [
-            'my_service' => [ MyServiceProvider::class, 'createMyService' ],
-            'alias' => [ MyServiceProvider::class, 'resolveAlias' ],
+            'my_service' => fn() => new MyService(),
+            'my_alias' => fn(ContainerInterface $container) => $container->get('my_service'),
         ];
     }
 
-    public function getExtensions()
-    {
-        return [];
-    }
-
     // ...
-
-    public static function resolveAlias(ContainerInterface $container)
-    {
-        return $container->get('my_service');
-    }
 }
 ```
 
