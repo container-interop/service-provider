@@ -16,24 +16,22 @@ interpreted as described in [RFC 2119][].
 
 ## 1. Specification
 
-### 1.1. Basics
-
 A service provider allows defining services and registering them with a [PSR-11][] container. This interface standardizes how frameworks and libraries declare service providers.
 
-#### 1.1.2. Service Identifiers
+### 1.1. Providing Services
+
+To declare a service provider, you implement the `Psr\Provider\ServiceProviderInterface`, which exposes two methods:
+
+- `getFactories`: Returns factories for creating services.
+- `getExtensions`: Returns extensions for modifying existing services.
+
+### 1.2. Service Identifiers
 
 A service identifier is a string that uniquely identifies a service within a container. A service identifier MUST be a legal PHP string identifier, as defined by [PSR-11][], cited here for reference:
 
 > An entry identifier is any PHP-legal string of at least one character that uniquely identifies an item within a container. An entry identifier is an opaque string, so callers SHOULD NOT assume that the structure of the string carries any semantic meaning.
 
-#### 1.1.3. Providing Services
-
-The `Psr\Provider\ServiceProviderInterface` exposes two methods:
-
-- `getFactories`: Returns factories for creating services.
-- `getExtensions`: Returns extensions for modifying existing services.
-
-### 1.2. Factories
+### 1.3. Factories
 
 A factory is a callable that accepts a container and returns a "service", which (in keeping with [PSR-11][]) may be any object/value. (a `mixed` value.)
 
@@ -53,7 +51,7 @@ A factory MAY return `null` for a service - this SHOULD NOT be treated as an err
 
 A factory SHOULD NOT cache anything or store state. Caching and state are the responsibility of the container.
 
-### 1.3. Extensions
+### 1.4. Extensions
 
 An extension is a callable for modifying an existing service.
 
@@ -67,7 +65,7 @@ function(Psr\Container\ContainerInterface $container, mixed $service): mixed
 
 Where `$service` is the existing service instance.
 
-The `$service` parameter MAY be typehinted as required by the extension, and MAY be nullable.
+The `$service` parameter SHOULD use a type-hint (where applicable) and MAY be nullable.
 
 An extension MUST return the modified service instance.
 
@@ -75,7 +73,7 @@ TODO "A extension MAY omit the `$container` and `$service` parameters, if unused
 
 An extension MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies, and (as stated in section 1.3) the existing service could intentionally be `null`.
 
-### 1.4. Dependencies
+### 1.5. Dependencies
 
 Factories and extensions MAY declare their dependencies by implementing the `ServiceDefinitionInterface`:
 
@@ -85,7 +83,7 @@ public function getDependencies(): array
 
 This allows containers to validate dependencies when registering services.
 
-### 1.5. Importing Definitions
+### 1.6. Importing Definitions
 
 When importing service definitions from a provider, containers:
 
@@ -130,7 +128,7 @@ Packages providing PSR provider implementations SHOULD declare providing `psr/pr
 
 TODO ^ is this relevant? do consumers need to require `psr/provider-implementation` for any reason?
 
-## 4. Usage Recommendations 
+## 4. Using Service Providers
 
 ### 4.1. General
 
