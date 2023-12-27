@@ -158,9 +158,7 @@ The second parameter of extensions CAN be nullable.
 function (ContainerInterface $container, ?MyLogger $logger = null)
 ```
 
-If an extension is defined for a service that does not exist, null will be passed as a second argument.
-
-TODO ^ #66
+This allows an extension to allow and handle a service that has been explicitly registered as `null`.
 
 ```php
 class B implements ServiceProviderInterface
