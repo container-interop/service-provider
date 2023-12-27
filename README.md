@@ -78,19 +78,11 @@ class A implements ServiceProviderInterface
     public function getFactories()
     {
         return [
-            'foo' => [ A::class,  'getFoo' ],
+            'foo' => fn() => 'abc',
         ];
     }
 
-    public function getExtensions()
-    {
-        return [];
-    }
-
-    public static function getFoo()
-    {
-        return 'abc';
-    }
+    // ...
 }
 ```
 
@@ -102,19 +94,11 @@ class B implements ServiceProviderInterface
     public function getFactories()
     {
         return [
-            'foo' => [ B::class, 'getFoo' ],
+            'foo' => fn() => 'def',
         ];
     }
 
-    public function getExtensions()
-    {
-        return [];
-    }
-
-    public static function getFoo()
-    {
-        return 'def';
-    }
+    // ...
 }
 ```
 
