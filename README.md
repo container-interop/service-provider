@@ -21,7 +21,7 @@ Refer to the [PSR meta document](./PSR-XX-provider-meta.md) for the historical b
 To declare a service provider, simply implement the `ServiceProviderInterface` interface.
 
 ```php
-use Interop\Container\ServiceProviderInterface;
+use Psr\Container\ServiceProviderInterface;
 
 class MyServiceProvider implements ServiceProviderInterface
 {
@@ -38,11 +38,11 @@ class MyServiceProvider implements ServiceProviderInterface
     public function getExtensions()
     {
         return [
-                'my_extended_service' => function(ContainerInterface $container, $extendedService) {
-                    $extendedService->registerExtension($container->get('my_service'));
-                    return $extendedService;
-                }
-            ];
+            'my_extended_service' => function(ContainerInterface $container, $extendedService) {
+                $extendedService->registerExtension($container->get('my_service'));
+                return $extendedService;
+            }
+        ];
     }
 }
 ```
