@@ -116,16 +116,11 @@ class A implements ServiceProviderInterface
     public function getFactories()
     {
         return [
-            'logger' => [ A::class, 'getLogger' ],
+            'logger' => fn() => new MyLogger(),
         ];
     }
     
     // ...
-
-    public static function getLogger()
-    {
-        return new Logger;
-    }
 }
 ```
 
@@ -134,30 +129,25 @@ Module B:
 ```php
 class B implements ServiceProviderInterface
 {
-    // ...
-    
     public function getExtensions()
     {
         return [
-            'logger' => [ B::class, 'getLogger' ],
+            'logger' => function (ContainerInterface $container, MyLogger $logger) {
+                $logger->addHandler(new MyHandler());
+
+                return $logger;
+            },
         ];
     }
 
-    public static function getLogger(ContainerInterface $container, $logger)
-    {
-        // Register a new log handler
-        $logger->addHandler(new SyslogHandler());
-
-        // Return the object that we modified
-        return $logger;
-    }
+    // ...
 }
 ```
 
 The second parameter of extensions SHOULD use type-hinting when applicable.
 
 ```php
-public static function getLogger(ContainerInterface $container, Logger $logger)
+function (ContainerInterface $container, MyLogger $logger)
 ```
 
 If a container passes a service that does not match the type hint, a `TypeError` will be thrown while bootstrapping the Container (in PHP 7+), or a catchable fatal error in PHP 5.
@@ -165,8 +155,7 @@ If a container passes a service that does not match the type hint, a `TypeError`
 The second parameter of extensions CAN be nullable.
 
 ```php
-public static function getLogger(ContainerInterface $container, Logger $logger = null)
-public static function getLogger(ContainerInterface $container, ?Logger $logger)
+function (ContainerInterface $container, ?MyLogger $logger = null)
 ```
 
 If an extension is defined for a service that does not exist, null will be passed as a second argument.
