@@ -155,35 +155,28 @@ If a container passes a service that does not match the type hint, a `TypeError`
 The second parameter of extensions CAN be nullable.
 
 ```php
-function (ContainerInterface $container, ?MyLogger $logger = null)
+function (ContainerInterface $container, ?MyLogger $logger)
 ```
 
-This allows an extension to allow and handle a service that has been explicitly registered as `null`.
+This allows an extension to handle a service that has been explicitly registered as `null` - for example:
 
 ```php
 class B implements ServiceProviderInterface
 {
-    // ...
     public function getExtensions()
     {
         return [
-            'logger' => [ B::class, 'getLogger' ],
+            'logger' => function (ContainerInterface $container, ?MyLogger $logger) {
+                if ($logger) {
+                    $logger->addHandler(new MyHandler());
+                }
+
+                return $logger; // if `logger` is `null`, the extension will simply return `null`
+            },
         ];
     }
 
-    public static function getLogger(ContainerInterface $container, ?Logger $logger)
-    {
-        // If no logger service is defined, let's simply ignore this extension (instead of throwing an error)
-        if ($logger === null) {
-            return null;
-        }
-        
-        // Register a new log handler
-        $logger->addHandler(new SyslogHandler());
-
-        // Return the object that we modified
-        return $logger;
-    }
+    // ...
 }
 ```
 
