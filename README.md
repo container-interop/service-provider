@@ -6,15 +6,15 @@ Service providers are classes that provide service definitions to a [PSR-11](htt
 
 The PSR depends on the PSR-11 [Container Interface](https://www.php-fig.org/psr/psr-11/#31-psrcontainercontainerinterface). Service providers operate on PSR-11 compatible containers.
 
-**Work in progress:** the project is currently experimental and is being tried in frameworks, containers and modules until considered viable. Until a 1.0.0 release, the code in this repository is not stable. Expect breaking changes between versions such as `0.1.x` and `0.2.0`.
+#### ⚠️ Work in progress
 
-## Proposal
+> the project is currently experimental and is being tried in frameworks, containers and modules until considered viable. Until a 1.0.0 release, the code in this repository is not stable. Expect breaking changes between versions such as `0.1.x` and `0.2.0`.
 
-Refer to the [current PSR draft](./PSR-XX-provider.md) for the concrete proposal.
+#### 👉 Refer to the [current PSR draft](./PSR-XX-provider.md) for the PSR proposal itself.
 
-## Background
+#### 🧐 Refer to the [PSR meta document](./PSR-XX-provider-meta.md) for the history and reasoning behind this proposal.
 
-Refer to the [PSR meta document](./PSR-XX-provider-meta.md) for the historical background of this proposal.
+#### 💬 Join us to review [open issues](/container-interop/service-provider/issues) or [participate in ongoing discussions](/container-interop/service-provider/discussions).
 
 <!-- TODO resolve #67
 
@@ -185,14 +185,15 @@ class B implements ServiceProviderInterface
 -->
 
 ## Compatible projects
-### Projects consuming *service providers*
+
+### Projects consuming `v0.4` *service providers*
 
 - [Laravel service provider bridge](https://github.com/thecodingmachine/laravel-universal-service-provider/): Use container-interop's service-providers into any [Laravel](http://laravel.com/) application.
 - [Simplex](https://github.com/mnapoli/simplex): A [Pimple 3](https://github.com/silexphp/Pimple) fork with full [container-interop](https://github.com/container-interop/container-interop) compliance and cross-framework service-provider support.
 - [Service provider bridge bundle](https://github.com/thecodingmachine/service-provider-bridge-bundle): Use container-interop's service-providers into a Symfony container.
 - [Yaco](https://github.com/thecodingmachine/yaco): A compiler that generates container-interop compliant containers. Yaco can consume service-providers.
 
-### Packages providing *service providers*
+### Packages providing `v0.4` *service providers*
 
 - [DBAL Module](https://github.com/thecodingmachine/dbal-universal-module): A module integrating [Doctrine DBAL](http://www.doctrine-project.org/projects/dbal.html) in an application using a service provider.
 - [Doctrine Annotations Module](https://github.com/thecodingmachine/doctrine-annotations-universal-module): A service provider for Doctrine's annotation reader.
