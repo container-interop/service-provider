@@ -200,14 +200,14 @@ class B implements ServiceProviderInterface
 - [Twig Module](https://github.com/thecodingmachine/twig-universal-module): A service provider for the Twig templating library.
 - [Whoops PSR-7 Middleware Module](https://github.com/thecodingmachine/whoops-middleware-universal-module): a service provider for the [Whoops](https://filp.github.io/whoops/) [PSR-7 middleware](https://github.com/franzliedke/whoops-middleware).
 
+<!-- TODO resolve #65
+
 ## Best practices
 
 ### Managing configuration
 
 The service created by a factory should only depend on the input parameters of the factory (`$container` and `$getPrevious`).
 If the factory needs to fetch parameters, those should be fetched from the container directly.
-
-TODO ^ #65
 
 ```php
 class MyServiceProvider implements ServiceProviderInterface
@@ -231,3 +231,5 @@ class MyServiceProvider implements ServiceProviderInterface
     }
 }
 ```
+
+-->
