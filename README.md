@@ -16,6 +16,8 @@ Refer to the [current PSR draft](./PSR-XX-provider.md) for the concrete proposal
 
 Refer to the [PSR meta document](./PSR-XX-provider-meta.md) for the historical background of this proposal.
 
+<!-- TODO resolve #67
+
 ## Usage
 
 To declare a service provider, simply implement the `ServiceProviderInterface` interface.
@@ -179,6 +181,8 @@ class B implements ServiceProviderInterface
     // ...
 }
 ```
+
+-->
 
 ## Compatible projects
 ### Projects consuming *service providers*
