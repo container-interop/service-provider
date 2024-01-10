@@ -165,7 +165,3 @@ TODO ^ this elaborates on what was already stated in section 1.2. Factories - sh
 ### 4.2. Idempotency  
 
 Calling a factory or extension multiple times with the same container instance SHOULD result in the same service being created each time. Factories and extensions SHOULD NOT maintain internal state that modifies the returned service.
-
-### 4.3. Declaring Dependencies
-
-Factories and extensions SHOULD declare their dependencies through `FactoryDefinitionInterface` and `ExtensionDefinitionInterface` rather than directly accessing the container. This allows containers to validate dependencies during configuration.
