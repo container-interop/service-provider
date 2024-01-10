@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 /**
  * An extension optionally implements this interface to reflect it's dependencies.
  */
-interface ExtensionDefinitionInterface extends ServiceDefinitionInterface
+interface ExtensionDefinitionInterface
 {
     /**
      * Extends a given service, using the given container to resolve dependencies.
