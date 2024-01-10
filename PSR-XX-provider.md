@@ -73,17 +73,19 @@ TODO "A extension MAY omit the `$container` and `$service` parameters, if unused
 
 An extension MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies, and (as stated in section 1.3) the existing service could intentionally be `null`.
 
-### 1.5. Dependencies
+### 1.5. Dependency Enumeration
 
-A `ServiceProviderInterface` implementation MAY implement the `ServiceDependencyInterface`:
+A `ServiceProviderInterface` implementation MAY implement the `ServiceDependencyInterface`, which enables enumeration of provider dependencies:
 
 ```php
 public function getDependencies(): array
 ```
 
-The `getDependencies` method MUST returns an associative array with the service identifier as the key, and an array of dependency service identifiers as the value.
+If a consuming container supports enumerated dependencies, it MAY perform a run-time type-check (e.g. `instanceof`) on a service provider instance, to check if the provider supports dependency enumeration.
 
-Containers MAY perform a run-time type-check (e.g. `instanceof`) to check if this information is provided, and MAY use this information to validate the dependencies of providers.
+The `getDependencies` method MUST return an associative array with the service identifier as the key, and an array of dependency service identifiers as the value. Dependency information may be used by a container to, for example, validate dependencies before invoking any factory/extension definitions.
+
+A consuming container MUST NOT reject a provider that does not support dependency enumeration.
 
 ### 1.6. Importing Definitions
 
