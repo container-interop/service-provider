@@ -83,7 +83,9 @@ A container MUST NOT reject a `callable` that does not implement the `ExtensionD
 
 ### 1.5. Dependency Enumeration
 
-A `ServiceProviderInterface` implementation MAY implement the `ServiceDependencyInterface`, which enables enumeration of provider dependencies:
+This feature enables containers to implement (for example) dependency validation, independently of invoking service/extension definitions.
+
+A `ServiceProviderInterface` implementation MAY implement the `ServiceDependencyInterface`, which enables a container to enumerate enumerate the dependencies of service/extension definitions:
 
 ```php
 public function getDependencies(): array
@@ -91,7 +93,7 @@ public function getDependencies(): array
 
 If a consuming container supports enumerated dependencies, it MAY perform a run-time type-check (e.g. `instanceof`) on a service provider instance, to check if the provider supports dependency enumeration.
 
-The `getDependencies` method MUST return an associative array with the service identifier as the key, and an array of dependency service identifiers as the value. Dependency information may be used by a container to, for example, validate dependencies before invoking any factory/extension definitions.
+The `getDependencies` method MUST return an associative array with the service identifier as the key, and an array of dependency service identifiers as the value.
 
 A consuming container MUST NOT reject a provider that does not support dependency enumeration.
 
