@@ -51,6 +51,10 @@ A factory MAY return `null` for a service - this SHOULD NOT be treated as an err
 
 A factory SHOULD NOT cache anything or store state. Caching and state are the responsibility of the container.
 
+A provider MAY choose to implement the optional `FactoryDefinitionInterface` for type-safety.
+
+A container MUST NOT reject a `callable` that does not implement the `FactoryDefinitionInterface` interface.
+
 ### 1.4. Extensions
 
 An extension is a callable for modifying an existing service.
@@ -72,6 +76,10 @@ An extension MUST return the modified service instance.
 TODO "A extension MAY omit the `$container` and `$service` parameters, if unused." - this would be similar to what is stated about factories, but it likely wouldn't make much sense, unless the order of the `$container` and `$service` parameters were reversed? see #50
 
 An extension MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies, and (as stated in section 1.3) the existing service could intentionally be `null`.
+
+A provider MAY choose to implement the optional `ExtensionDefinitionInterface` for type-safety.
+
+A container MUST NOT reject a `callable` that does not implement the `ExtensionDefinitionInterface` interface.
 
 ### 1.5. Dependency Enumeration
 
@@ -112,17 +120,17 @@ After importing from the provider, the container will contain:
 
 Defines the service provider interface.
 
-### 2.2. `Psr\Provider\ServiceDefinitionInterface` 
+### 2.2. `Psr\Provider\ServiceDependencyInterface` 
 
-Allows declaring service dependencies. Implemented by factories and extensions.
+Allows declaring service dependencies. Implemented by service providers.
 
 ### 2.3. `Psr\Provider\FactoryDefinitionInterface`
 
-A factory that declares dependencies. (Extends `ServiceDefinitionInterface`.)
+An optional interface for factory functions.
 
 ### 2.4. `Psr\Provider\ExtensionDefinitionInterface`
 
-An extension that declares dependencies. (Extends `ServiceDefinitionInterface`.)
+An optional interface for extension functions.
 
 ## 3. Package
 
