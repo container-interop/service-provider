@@ -82,3 +82,11 @@ Integration with projects like Puli was explored, for automatic discovery and bi
 Puli is EOL by now, but served as proof of concept with regards to the potential for service discovery, whether this be framework-specific, or via a future standard.
 
 Service discovery (as a feature of the standard) is outside the scope of this PSR.
+
+## 7. Dependency Enumeration
+
+An earlier approach to dependency enumeration required factory/extension callables to implement an optional interface with an additional method, which would allow a container to enumerate the dependency IDs of individual factory/extension definitions. This approach required excessive run-time type-checking by the container.
+
+The current approach uses an optional interface, which may be implemented by providers: not all providers will be able to enumerate their dependencies, and not all containers will be able to consume that information. This approach favors interoperability and performance.
+
+The option of simply adding the `getDependencies()` method to the service provider interface was also considered - however, the chosen approach with an optional interface avoids the need for a boilerplate `return []` implementation of the method by providers that can't actually enumerate their dependencies, and instead makes it a an explicit opt-in for providers that do support this feature.
