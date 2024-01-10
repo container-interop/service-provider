@@ -75,13 +75,15 @@ An extension MAY return `null` for a service - this SHOULD NOT be treated as an 
 
 ### 1.5. Dependencies
 
-Factories and extensions MAY declare their dependencies by implementing the `ServiceDefinitionInterface`:
+A `ServiceProviderInterface` implementation MAY implement the `ServiceDependencyInterface`:
 
 ```php
 public function getDependencies(): array
 ```
 
-This allows containers to validate dependencies when registering services.
+The `getDependencies` method MUST returns an associative array with the service identifier as the key, and an array of dependency service identifiers as the value.
+
+Containers MAY perform a run-time type-check (e.g. `instanceof`) to check if this information is provided, and MAY use this information to validate the dependencies of providers.
 
 ### 1.6. Importing Definitions
 
