@@ -7,7 +7,7 @@ use Psr\Container\ContainerInterface;
 /**
  * A factory optionally implements this interface to reflect it's dependencies.
  */
-interface FactoryDefinitionInterface extends ServiceDefinitionInterface
+interface FactoryDefinitionInterface
 {
     /**
      * Creates the entry, using the given container to resolve dependencies.
