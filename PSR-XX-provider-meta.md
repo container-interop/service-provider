@@ -85,6 +85,8 @@ Service discovery (as a feature of the standard) is outside the scope of this PS
 
 ## 7. Dependency Enumeration
 
+`ServiceDependencyInterface` enables a container to enumerate the dependencies of service/extension definitions - this feature enables containers to implement dependency validation, independently of invoking the service/extension functions.
+
 An earlier approach to dependency enumeration required factory/extension callables to implement an optional interface with an additional method, which would allow a container to enumerate the dependency IDs of individual factory/extension definitions. This approach required excessive run-time type-checking by the container.
 
 The current approach uses an optional interface, which may be implemented by providers: not all providers will be able to enumerate their dependencies, and not all containers will be able to consume that information. This approach favors interoperability and performance.
