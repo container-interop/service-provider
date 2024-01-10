@@ -19,7 +19,7 @@ interface ServiceProviderInterface
      * 
      *     function(\Psr\Container\ContainerInterface $container)
      *
-     * @return ((callable(ContainerInterface):mixed)|FactoryDefinitionInterface)[]
+     * @return array<string,((callable(ContainerInterface):mixed)|FactoryDefinitionInterface)>
      */
     public function getFactories(): array;
 
@@ -39,7 +39,7 @@ interface ServiceProviderInterface
      * - the container (instance of `Psr\Container\ContainerInterface`)
      * - the entry to be extended. If the entry to be extended does not exist and the parameter is nullable, `null` will be passed.
      *
-     * @return ((callable(ContainerInterface,mixed):mixed)|ExtensionDefinitionInterface)[]
+     * @return array<string,((callable(ContainerInterface,mixed):mixed)|ExtensionDefinitionInterface)[]>
      */
     public function getExtensions(): array;
 }
