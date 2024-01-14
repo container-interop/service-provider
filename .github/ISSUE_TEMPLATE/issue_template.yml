@@ -1,12 +1,11 @@
 name: Issue
-description: File an issue
+description: For errata: spelling, wording, formatting, conflicting/inconsistent information, etc.
 body:
   - type: markdown
     attributes:
       value: |
-        Please use issues for things like typos, wording, formatting, conflicting information, etc.
-        
-        For discussions, suggestions and ideas, please use the [Discussions](https://github.com/container-interop/service-provider/discussions) tab.
+        * Please use issues for things like typos, wording, formatting, conflicting information, etc.
+        * For discussions, suggestions and ideas, please use the [Discussions](https://github.com/container-interop/service-provider/discussions) tab.
   - type: checkboxes
     id: confirm
     attributes:
