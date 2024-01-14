@@ -51,7 +51,7 @@ A factory MAY return `null` for a service - this SHOULD NOT be treated as an err
 
 A factory SHOULD NOT cache anything or store state. Caching and state are the responsibility of the container.
 
-A provider MAY choose to implement the optional `FactoryDefinitionInterface` for type-safety.
+A factory MAY implement the optional `FactoryDefinitionInterface` for type-safety.
 
 A container MUST NOT reject a `callable` that does not implement the `FactoryDefinitionInterface` interface.
 
@@ -77,7 +77,7 @@ TODO "A extension MAY omit the `$container` and `$service` parameters, if unused
 
 An extension MAY return `null` for a service - this SHOULD NOT be treated as an error, as other services may have nullable dependencies, and (as stated in section 1.3) the existing service could intentionally be `null`.
 
-A provider MAY choose to implement the optional `ExtensionDefinitionInterface` for type-safety.
+An extension MAY implement the optional `ExtensionDefinitionInterface` for type-safety.
 
 A container MUST NOT reject a `callable` that does not implement the `ExtensionDefinitionInterface` interface.
 
