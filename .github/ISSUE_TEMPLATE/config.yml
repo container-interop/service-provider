@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions
+    url: https://github.com/container-interop/service-provider/discussions
+    about: For discussions, suggestions and ideas, please use the Discussions tab.
