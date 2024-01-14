@@ -1,5 +1,5 @@
 name: Issue
-description: For errata: spelling, wording, formatting, conflicting/inconsistent information, etc.
+description: "For errata: spelling, wording, formatting, conflicting/inconsistent information, etc."
 body:
   - type: markdown
     attributes:
