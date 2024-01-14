@@ -9,7 +9,5 @@ body:
         For discussions, suggestions and ideas, please use the [Discussions](https://github.com/container-interop/service-provider/discussions) tab.
   - type: textarea
     id: bug-description
-    attributes:
-      label: Issue description
     validations:
       required: true
